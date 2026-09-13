@@ -190,9 +190,121 @@ def soft_skills(text: str) -> set:
     return {s for s in SOFT_SKILLS if s in low}
 
 
-def years_in(text: str) -> float:
+def jd_years(text: str) -> float:
+    """JDs rarely have dates — just read the explicit 'X+ years' ask."""
     matches = re.findall(r"(\d+)\s*\+?\s*(?:years|yrs)", text, re.IGNORECASE)
     return max((int(m) for m in matches), default=0)
+
+
+_MONTHS = {
+    "jan": 1, "january": 1, "feb": 2, "february": 2, "mar": 3, "march": 3,
+    "apr": 4, "april": 4, "may": 5, "jun": 6, "june": 6, "jul": 7, "july": 7,
+    "aug": 8, "august": 8, "sep": 9, "sept": 9, "september": 9, "oct": 10,
+    "october": 10, "nov": 11, "november": 11, "dec": 12, "december": 12,
+}
+
+_DATE_TOKEN = r"(?:\d{1,2}/\d{4}|[A-Za-z]{3,9}\.?\s+\d{4}|\d{4})"
+_DATE_RANGE_RE = re.compile(
+    rf"({_DATE_TOKEN})\s*(?:-|–|—|to)\s*({_DATE_TOKEN}|present|current|now|ongoing)",
+    re.IGNORECASE,
+)
+
+
+EXPERIENCE_HEADERS = {
+    "experience", "professional experience", "work experience",
+    "employment history", "relevant experience", "career history",
+}
+OTHER_HEADERS = {
+    "education", "skills", "projects", "certifications", "summary",
+    "objective", "awards", "publications", "volunteer", "references",
+    "technical skills", "languages", "interests", "activities",
+    "professional summary", "core competencies",
+}
+
+
+def _clean_header(line: str) -> str:
+    """Strip markdown/bullet noise from a line so it can be compared against header names."""
+    return re.sub(r"^[#\-\*\s]+", "", line).strip(" :").lower()
+
+
+def experience_section(text: str) -> str:
+    """
+    Slice out just the block under an 'Experience' / 'Professional Experience'
+    heading, stopping at the next section heading (Education, Skills, etc.).
+    Date ranges are only ever read from inside this slice, so a degree's
+    '2016 - 2020' never gets mistaken for work history.
+    """
+    lines = text.split("\n")
+    start = None
+    for i, line in enumerate(lines):
+        if _clean_header(line) in EXPERIENCE_HEADERS:
+            start = i + 1
+            break
+    if start is None:
+        return ""
+
+    collected = []
+    for line in lines[start:]:
+        if _clean_header(line) in OTHER_HEADERS:
+            break
+        collected.append(line)
+    return "\n".join(collected)
+
+
+def _to_year_month(token: str):
+    """Turn '07/2024', 'July 2024', or '2024' into a (year, month) pair."""
+    token = token.strip()
+    if token.lower() in ("present", "current", "now", "ongoing"):
+        today = date.today()
+        return today.year, today.month
+    m = re.match(r"(\d{1,2})/(\d{4})", token)
+    if m:
+        return int(m.group(2)), int(m.group(1))
+    m = re.match(r"([A-Za-z]{3,9})\.?\s+(\d{4})", token)
+    if m:
+        month = _MONTHS.get(m.group(1).lower()[:3], 1)
+        return int(m.group(2)), month
+    m = re.match(r"(\d{4})", token)
+    if m:
+        return int(m.group(1)), 1  # bare year — assume January
+    return None
+
+
+def resume_years(text: str) -> float:
+    """
+    Total professional experience, computed only from date ranges found
+    inside the Experience / Professional Experience section:
+      - different years  -> duration = end_year - start_year
+      - same year         -> duration = (end_month - start_month) / 12
+    Each range's duration goes into a list; the total is the sum.
+    Falls back to a stated figure ('5+ years') only if no Experience
+    section is found, or it contains no parseable date ranges.
+    """
+    section = experience_section(text)
+    if not section:
+        matches = re.findall(r"(\d+)\s*\+?\s*(?:years|yrs)", text, re.IGNORECASE)
+        return float(max((int(m) for m in matches), default=0))
+
+    durations = []
+    for start_tok, end_tok in _DATE_RANGE_RE.findall(section):
+        start = _to_year_month(start_tok)
+        end = _to_year_month(end_tok)
+        if not start or not end:
+            continue
+        start_year, start_month = start
+        end_year, end_month = end
+        if (end_year, end_month) <= (start_year, start_month):
+            continue
+        if end_year != start_year:
+            durations.append(end_year - start_year)
+        else:
+            durations.append((end_month - start_month) / 12)
+
+    if durations:
+        return round(sum(durations), 1)
+
+    matches = re.findall(r"(\d+)\s*\+?\s*(?:years|yrs)", text, re.IGNORECASE)
+    return float(max((int(m) for m in matches), default=0))
 
 
 def grade(score: float) -> str:
@@ -224,7 +336,7 @@ def match(resume_text: str, jd_text: str) -> dict:
     soft_jd, soft_resume = soft_skills(jd_text), soft_skills(resume_text)
     soft_overlap = (len(soft_jd & soft_resume) / len(soft_jd)) if soft_jd else 1.0
 
-    yrs_required, yrs_have = years_in(jd_text), years_in(resume_text)
+    yrs_required, yrs_have = jd_years(jd_text), resume_years(resume_text)
     if yrs_required == 0:
         years_modifier = 0
     elif yrs_have >= yrs_required:
