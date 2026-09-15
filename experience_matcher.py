@@ -65,7 +65,7 @@ def extract_experience_section(resume):
 
 
 def extract_experience_months(experience_section):
-  
+
     pattern = (
         r'(\d{1,2})/(\d{2,4})'
         r'\s*[-–]'
@@ -79,7 +79,7 @@ def extract_experience_months(experience_section):
         re.IGNORECASE
     )
 
-    total_months = 0
+    experience_periods = []
 
     for (
         start_month,
@@ -92,43 +92,68 @@ def extract_experience_months(experience_section):
         start_month = int(start_month)
         start_year = int(start_year)
 
-        # Convert 2-digit year to 4-digit year
         if start_year < 100:
             start_year += 2000
 
-        start_date = datetime(
-            start_year,
-            start_month,
-            1
+        start_total_months = (
+            start_year * 12 + start_month
         )
 
         if present:
+            now = datetime.now()
 
-            end_date = datetime.now()
+            end_total_months = (
+                now.year * 12 + now.month
+            )
 
         else:
-
             end_month = int(end_month)
             end_year = int(end_year)
 
             if end_year < 100:
                 end_year += 2000
 
-            end_date = datetime(
-                end_year,
-                end_month,
-                1
+            end_total_months = (
+                end_year * 12 + end_month
             )
 
-        months = (
-            (end_date.year - start_date.year) * 12
-            + (end_date.month - start_date.month)
-        )
+        if end_total_months >= start_total_months:
+            experience_periods.append(
+                (start_total_months, end_total_months)
+            )
 
-        total_months += months
+    if not experience_periods:
+        return 0
+
+    # Sort periods by start date
+    experience_periods.sort()
+
+    # Start with the first period
+    merged_periods = [experience_periods[0]]
+
+    for current_start, current_end in experience_periods[1:]:
+
+        previous_start, previous_end = merged_periods[-1]
+
+        # Overlapping or directly connected periods
+        if current_start <= previous_end:
+            merged_periods[-1] = (
+                previous_start,
+                max(previous_end, current_end)
+            )
+
+        else:
+            merged_periods.append(
+                (current_start, current_end)
+            )
+
+    # Calculate total months after merging
+    total_months = 0
+
+    for start, end in merged_periods:
+        total_months += end - start
 
     return total_months
-
 
 def months_to_years_months(total_months):
 
