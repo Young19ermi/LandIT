@@ -97,6 +97,7 @@ skills = [
 
 
 # Extract skills from resume and job description
+"""Here for Resue and JD,I can use the input directly here"""
 result_resume = extract_skills(skills, resume)
 result_job_description = extract_skills(skills, job_description)
 
@@ -121,6 +122,3 @@ score = similarity_score(
     result_job_description
 )
 
-print("Resume skills:", result_resume)
-print("Job skills:", result_job_description)
-print(f"Skill match: {score:.2f}%")
