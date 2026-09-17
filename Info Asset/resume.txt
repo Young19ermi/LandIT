@@ -1,0 +1,238 @@
+Ermias S. Endale
+ermiasendale19
+@gmail.com
+LinkedIn
+GitLab
+GitHub
+LeetCode
+Available for B2B · Remote (GMT+3)
+PROFESSIONAL SUMMARY
+Self-taught full-stack engineer with hands-on experience across the stack from
+front-end interfaces to backend/API
+work at Eskalate, using
+React, Next.js, and Redux in Agile teams
+. Delivered production-grade WebGL/Three.js features in a live
+SaaS product
+within months of joining including performance work (LCP/INP optimization) typically owned by senior engineers. 800+ algorithmic problems solved on
+LeetCode
+and
+Codeforces
+.
+EDUCATION
+Addis
+Ababa
+Science
+and
+Technology
+University,
+BSc
+in
+Environmental
+Engineering
+⁠
+•
+Relevant Coursework: Geographic Information System(GIS) and Spatial Analysis, Environmental Modeling, Simulation, Analysis using Python and Statistical Analysis.
+2021 – 2026 (Graduated)
+Addis Ababa, Ethiopia
+Africa
+To
+Silicon
+Valley,
+Coding
+Academy
+(Backed
+by
+Google)
+⁠
+•
+A2SV upskills high-potential African students and connects them with top tech companies, having successfully placed over 80 students at leading companies including Google, Bloomberg, Databricks, Amazon, LinkedIn, and Square in the past four years.
+01/2023 – 02/2024
+Addis Ababa, Ethiopia
+•
+Learned and applied Data Structures & Algorithms using Python as the primary teaching language, building a strong foundation in problem-solving and algorithmic thinking.
+PROJECTS
+AASTU
+Maps
+-
+Interactive
+Campus
+Navigation
+App⁠
+Mobile
+Development
+|
+Map
+Integration
+|
+AI
+•
+Shipped consumer-facing features for a public-facing mobile app with 3,000+ active users, integrating OpenStreetMap and Gebeta Maps for real-time navigation.
+06/2024 – 05/2025
+•
+Revamped Flutter app's UI and event alerts, collaborating with GDG AASTU on 3+ releases to improve navigation accuracy by 30% and boost daily user engagement by 40%.
+Hahu
+Globes
+-
+3D
+Planet
+Visualizer
+for
+Kids
+⁠
+3D
+Web
+Developer
+•
+Engineered an interactive
+Three.js 3D globe interface
+with custom shaders, responsive animations, and immersive orbital motion synchronized to user interactions.
+08/2024 – 09/2024
+•
+Integrated GSAP to drive smooth transitions, scroll-based animations, easing functions, and layered sequence effects for engaging visual flow.
+FurnishET:
+Elevate
+Your
+Space
+with
+Style
+⁠
+3D
+Web
+Developer
+•
+Built a 3D furniture website that allows users to engage with 3D objects. Users can change the lighting and color while rotating and animating the furniture models.
+01/2025 – 03/2025
+•
+The website improved the shopping experience by offering a clean interface, fast performance, and mobile compatibility.
+Abyline
+—
+Interactive
+3D
+Web
+Experience
+⁠
+Three.js
+Developer
+•
+Developed an immersive interactive 3D web experience using Three.js and WebGL to showcase creative brand content, with smooth transitions and animated 3D elements.
+03/2025 – 05/2025
+•
+Implemented performance-focused rendering techniques and optimized scene flow for seamless user engagement across devices.
+IONO,
+AI
+powered
+research
+making
+tool
+⁠
+Web
+Developer
+|
+AI
+Research
+Tool
+|
+React
+|
+Python
+|
+OpenAI
+API
+•
+Built a web interface using the
+OpenAI API
+to source relevant research materials and surface real-time, context-aware suggestions based on the user's research topic.
+05/2024 – 08/2024
+•
+Built an
+OCR pipeline
+to digitize hardcopy research into searchable, AI-queryable text and improve overall research productivity.
+EXPERIENCE
+Software
+Engineer
+Intern,
+Eskalate
+⁠
+•
+Worked in a team of 7 web developers to develop a starter project using Next.JS along with RTK Query and Tailwind CSS, achieving a 20% reduction in project delivery through effective utilization of Agile methodologies.
+02/2024 – 07/2024
+Addis Ababa, Ethiopia
+•
+Reviewed code for quality assurance, ensuring adherence to best practices and high standards.
+•
+Worked on setting up the Redux along with a teammate and the user interface for a single blog view page.
+Lead
+Three.js
+Developer,
+Ideeza
+⁠
+•
+Built and optimized complex Three.js features for a large-scale 3D PCB design system (Altium-style), delivering smooth real-time interactions, animations, and high-fidelity rendering in the browser.
+08/2025 – Present
+Tel Aviv, Israel
+•
+Improved WebGL performance across heavy scenes by optimizing shaders, reducing draw calls, and restructuring rendering logic, resulting in significantly better LCP, INP, and frame consistency.ermiasendale19@gmail.com
+SKILLS
+React,
+Next.js,
+Redux,
+TypeScript,
+JavaScript,
+Three.js/WebGL,
+Flutter,
+css3,
+html5,
+ci/cd
+Python
+|
+Jest
+|
+React
+Testing
+Library
+|
+REST
+APIs
+|
+GitHub
+Actions
+|
+n8n
+ACHIEVEMENTS
+800+
+Problems
+Solved
+on
+LeetCode
+and
+Codeforces
+•
+Resolved over 800 algorithmic challenges on
+Leetcode
+⁠
+and
+Codeforces
+⁠
+, leading to enhanced coding proficiency and the ability to identify solutions for complex software engineering problems encountered during internship.
+02/2023 – present
+Quarterfinalist
+in
+the
+A2SV
+Grand
+AI
+Hackathon,
+A2SV
+⁠
+•
+In recognition of reaching the top 128 quarterfinalists in Africa’s largest hackathon, competing against 1100+ teams from 48 countries and contributing to innovative AI solutions addressing real-world challenges.
+07/2024 – 09/2024
+Outstanding
+Team
+Leadership,
+GDSC
+AASTU
+⁠
+•
+Recognized for demonstrating exceptional leadership, fostering effective team collaboration, and exhibiting unwavering dedication during the 2024 GDSC AASTU Grand Hackathon.
+06/2024ermiasendale19@gmail.com

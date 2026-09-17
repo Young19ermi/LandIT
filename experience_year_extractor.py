@@ -3,10 +3,23 @@ from datetime import datetime
 
 
 def extract_required_experience(job_description):
+    """
+    Extract the minimum years of experience
+    required by the job description.
+    """
+
+    if not job_description:
+        return 0
 
     patterns = [
-        r'(\d+)\+?\s*years?\s+of\s+experience',
-        r'(\d+)\+?\s*years?\s+experience',
+        # Example:
+        # "2+ years of professional software development experience"
+        # "3 years of backend development experience"
+        r'(\d+)\+?\s*years?\s+(?:of\s+)?(?:[\w]+\s+){0,8}experience',
+
+        # Example:
+        # "minimum 2 years"
+        # "at least 3 years"
         r'(?:minimum|at\s+least)\s+(\d+)\s*years?'
     ]
 
@@ -22,19 +35,36 @@ def extract_required_experience(job_description):
 
 
 def extract_experience_section(resume):
+    """
+    Extract only the professional/work experience
+    section from the resume.
+    """
+
+    if not resume:
+        return ""
 
     experience_pattern = (
-        r'\b(?:professional\s+experience|work\s+experience|'
-        r'work\s+history|employment\s+history|'
-        r'career\s+history|professional\s+background|'
+        r'\b(?:professional\s+experience|'
+        r'work\s+experience|'
+        r'work\s+history|'
+        r'employment\s+history|'
+        r'career\s+history|'
+        r'professional\s+background|'
         r'experience)\b'
     )
 
     next_section_pattern = (
-        r'\b(?:education|projects|skills|'
-        r'certifications|awards|languages|'
-        r'summary|profile|references|'
-        r'achievements|volunteer\s+experience)\b'
+        r'\b(?:education|'
+        r'projects|'
+        r'skills|'
+        r'certifications|'
+        r'awards|'
+        r'languages|'
+        r'summary|'
+        r'profile|'
+        r'references|'
+        r'achievements|'
+        r'volunteer\s+experience)\b'
     )
 
     experience_match = re.search(
@@ -65,6 +95,16 @@ def extract_experience_section(resume):
 
 
 def extract_experience_months(experience_section):
+    """
+    Extract job date ranges and calculate total
+    professional experience in months.
+
+    Overlapping jobs are merged so that the same
+    period is not counted twice.
+    """
+
+    if not experience_section:
+        return 0
 
     pattern = (
         r'(\d{1,2})/(\d{2,4})'
@@ -119,23 +159,25 @@ def extract_experience_months(experience_section):
 
         if end_total_months >= start_total_months:
             experience_periods.append(
-                (start_total_months, end_total_months)
+                (
+                    start_total_months,
+                    end_total_months
+                )
             )
 
     if not experience_periods:
         return 0
 
-    # Sort periods by start date
+    # Sort periods by start date.
     experience_periods.sort()
 
-    # Start with the first period
+    # Merge overlapping periods.
     merged_periods = [experience_periods[0]]
 
     for current_start, current_end in experience_periods[1:]:
 
         previous_start, previous_end = merged_periods[-1]
 
-        # Overlapping or directly connected periods
         if current_start <= previous_end:
             merged_periods[-1] = (
                 previous_start,
@@ -144,10 +186,12 @@ def extract_experience_months(experience_section):
 
         else:
             merged_periods.append(
-                (current_start, current_end)
+                (
+                    current_start,
+                    current_end
+                )
             )
 
-    # Calculate total months after merging
     total_months = 0
 
     for start, end in merged_periods:
@@ -155,7 +199,11 @@ def extract_experience_months(experience_section):
 
     return total_months
 
+
 def months_to_years_months(total_months):
+    """
+    Convert total months into years and months.
+    """
 
     years = total_months // 12
     months = total_months % 12
@@ -167,6 +215,10 @@ def calculate_experience_score(
     candidate_months,
     required_years
 ):
+    """
+    Calculate how much of the required experience
+    the candidate satisfies.
+    """
 
     required_months = required_years * 12
 
@@ -178,3 +230,42 @@ def calculate_experience_score(
     ) * 100
 
     return min(score, 100)
+
+
+def experience_matcher(resume, job_description):
+    """
+    Main experience matching function.
+
+    Extracts the candidate's experience,
+    extracts the job's required experience,
+    calculates the score, and returns the result.
+    """
+
+    experience_section = extract_experience_section(
+        resume
+    )
+
+    candidate_months = extract_experience_months(
+        experience_section
+    )
+
+    required_years = extract_required_experience(
+        job_description
+    )
+
+    score = calculate_experience_score(
+        candidate_months,
+        required_years
+    )
+
+    candidate_years, remaining_months = (
+        months_to_years_months(candidate_months)
+    )
+
+    return {
+        "score": score,
+        "candidate_months": candidate_months,
+        "candidate_years": candidate_years,
+        "candidate_remaining_months": remaining_months,
+        "required_years": required_years
+    }

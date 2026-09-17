@@ -1,20 +1,3 @@
-"""
-Tsehay — local resume/JD matcher, v2. No API calls, no cost.
-
-What's new vs v1:
-  - Skill aliases (js -> javascript, k8s -> kubernetes, etc.)
-  - Context-aware requirement weighting: a skill mentioned in a sentence
-    with "required"/"must have" counts more than one in a "nice to have"
-    sentence, instead of just raw frequency.
-  - Bigram TF-IDF similarity (catches phrases, not just single words).
-  - New metrics: title match, action-verb strength, quantified-achievement
-    ratio, soft-skill overlap.
-  - Letter grade alongside the numeric score.
-  - Shorter, plain-English function names.
-
-Requires: pip install requests beautifulsoup4 scikit-learn
-"""
-
 import re
 import json
 import argparse
@@ -361,8 +344,8 @@ def match(resume_text: str, jd_text: str) -> dict:
         "grade": grade(score),
         "metrics": {
             "skill_coverage_pct": round(skill_coverage * 100, 1),
-            "text_similarity_pct": round(text_sim * 100, 1),
-            "title_match_pct": round(title * 100, 1),
+            "text_similarity_pct": round(text_sim * 1, 1),
+            "title_match_pct": round(title * 100, 3),
             "action_verb_strength_pct": round(verbs * 100, 1),
             "quantified_bullets_pct": round(quant * 100, 1),
             "soft_skill_overlap_pct": round(soft_overlap * 100, 1),
@@ -425,3 +408,4 @@ if __name__ == "__main__":
 
     output = analyze(args.resume, jd_path=args.jd, jd_url=args.jd_url)
     print(json.dumps(output, indent=2))
+    

@@ -110,4 +110,6 @@ def education_matcher(resume_text, JD):
     matched_degrees = len(set(candidate_degrees).intersection(set(required_degrees))) 
     score = (matched_degrees / len(required_degrees)) * 100
     score = min(score, 100)
-    return score
+    if not matched_degrees:
+        return 0
+    return 100
