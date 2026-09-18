@@ -214,10 +214,6 @@ def generate_match_report(resume, job_description):
         )
 
 
-    # -----------------------------------
-    # 10. FINAL REPORT
-    # -----------------------------------
-
     return {
 
         "overall_score": round(
